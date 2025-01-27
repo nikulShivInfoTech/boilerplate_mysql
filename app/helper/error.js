@@ -1,6 +1,3 @@
-
-
-
 const { StatusCodes } = require("http-status-codes");
 
 class GeneralError extends Error {
