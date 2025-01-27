@@ -1,0 +1,131 @@
+info: Connected to the database {"timestamp":"2025-01-25T13:15:49.251Z"}
+info: Connected to the database
+info: Connected to the database
+info: Connected to the database
+info: Connected to the database
+info: Connected to the database
+info: Connected to the database
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+error: Database connection failed: AggregateError
+    at internalConnectMultiple (node:net:1114:18)
+    at afterConnectMultiple (node:net:1667:5)
+    --------------------
+    at Protocol._enqueue (E:\NIKUL\boilerplate\boilerplate_mysql\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Protocol.handshake (E:\NIKUL\boilerplate\boilerplate_mysql\node_modules\mysql\lib\protocol\Protocol.js:51:23)
+    at Connection.connect (E:\NIKUL\boilerplate\boilerplate_mysql\node_modules\mysql\lib\Connection.js:116:18)
+    at database (E:\NIKUL\boilerplate\boilerplate_mysql\app\helper\db.js:10:8)
+    at Object.<anonymous> (E:\NIKUL\boilerplate\boilerplate_mysql\index.js:17:1)
+    at Module._compile (node:internal/modules/cjs/loader:1241:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)
+    at Module.load (node:internal/modules/cjs/loader:1091:32)
+    at Module._load (node:internal/modules/cjs/loader:938:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
+info: Your app is running on server: 5000
+info: Connected to the database
