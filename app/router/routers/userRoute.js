@@ -8,7 +8,7 @@ const {
   resetPassword,
   send_Mail_Of_OTP,
   forgotPassword,
-} = require('../../controller/usermodule');
+} = require('../../controller/userController');
 const { auth } = require('../../middleware/auth');
 
 route.post('/registration', registration);
