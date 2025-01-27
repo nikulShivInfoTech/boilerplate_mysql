@@ -13,7 +13,11 @@ const message = {
     INVALID_OTP:"OTP does not match!.",
     OTP_FAIL:'Failed to set up OTP process. Please try again later.',
     OTP_ERROR_EMAIL:'User not found with the provided email address',
-    FAIL_SENT_OTP:   'Failed to send OTP email. Please try again later.'
+    FAIL_SENT_OTP:   'Failed to send OTP email. Please try again later.',
+    NO_TOKEN:  'No token provided',
+    INVALID_TOKEN_FORMAT: 'Invalid token format',
+    INVALID_TOKEN: 'Invalid token',
+    TOKEN_EXPIRED: 'Token has expired, please log in again',
   };
   
   module.exports = message;

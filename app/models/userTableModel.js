@@ -8,7 +8,6 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-// Ensure the users table exists
 const ensureTableExists = () => {
   const createTableQuery = `
         CREATE TABLE IF NOT EXISTS users (
@@ -21,8 +20,8 @@ const ensureTableExists = () => {
     `;
   db.query(createTableQuery, (err) => {
     if (err) {
-    throw err
-    } 
+      throw err;
+    }
   });
 };
 

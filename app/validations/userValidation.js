@@ -28,6 +28,7 @@ const userRegistrationValidation = Joi.object({
     'any.required': 'Confirm password is a required field',
   }),
 });
+
 const loginValidation = Joi.object({
   email: Joi.string()
     .email({ tlds: { allow: false } })
@@ -44,7 +45,6 @@ const loginValidation = Joi.object({
     'any.required': 'Password is a required field',
   }),
 });
-
 
 const editUserValidation = Joi.object({
   name: Joi.string().required().trim().messages({
@@ -77,24 +77,33 @@ const passwordResetValidation = Joi.object({
     'any.required': 'New password is a required field',
     'string.min': 'New password must be at least 6 characters long',
   }),
-  confirmPassword: Joi.string().valid(Joi.ref('newPassword')).required().messages({
-    'any.only': 'Confirm password must match the new password',
-    'string.empty': 'Confirm password cannot be empty',
-    'any.required': 'Confirm password is a required field',
-  }),
+  confirmPassword: Joi.string()
+    .valid(Joi.ref('newPassword'))
+    .required()
+    .messages({
+      'any.only': 'Confirm password must match the new password',
+      'string.empty': 'Confirm password cannot be empty',
+      'any.required': 'Confirm password is a required field',
+    }),
 });
+
 const emailValidation = Joi.object({
   email: Joi.string()
-  .email({ tlds: { allow: false } })
-  .required()
-  .trim()
-  .messages({
-    'string.base': 'Email must be a string',
-    'string.email': 'Email must be a valid email address',
-    'string.empty': 'Email cannot be empty',
-    'any.required': 'Email is a required field',
-  })
+    .email({ tlds: { allow: false } })
+    .required()
+    .trim()
+    .messages({
+      'string.base': 'Email must be a string',
+      'string.email': 'Email must be a valid email address',
+      'string.empty': 'Email cannot be empty',
+      'any.required': 'Email is a required field',
+    }),
 });
 
-
-module.exports = { userRegistrationValidation, loginValidation, editUserValidation, passwordResetValidation, emailValidation };
+module.exports = {
+  userRegistrationValidation,
+  loginValidation,
+  editUserValidation,
+  passwordResetValidation,
+  emailValidation,
+};
