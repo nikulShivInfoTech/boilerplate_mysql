@@ -240,10 +240,10 @@ const deleteCategory = async (req, res) => {
           );
       } else {
         logger.info(result);
-        return res.status(StatusCodes.OK).json(
+        return res.status(StatusCodes.ACCEPTED).json(
           new GeneralResponse(
             responseStatus.RESPONSE_SUCCESS,
-            StatusCodes.OK,
+            StatusCodes.ACCEPTED,
             `Category ${message.DELETE_SUCCESS}`,
             {
               id,
