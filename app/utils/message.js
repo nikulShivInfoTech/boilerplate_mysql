@@ -20,10 +20,11 @@ const message = {
   INVALID_TOKEN: 'Invalid token',
   TOKEN_EXPIRED: 'Token has expired, please log in again',
   EMAIL_HEADING: 'Password Reset OTP',
-  CATEGORY_ADD_SUCCESS: 'Category added successfully',
-  CATEGORY_UPDATE_SUCCESS: 'Category updated successfully.',
-  CATEGORY_NOT_FOUND: 'Category not found.',
-  CATEGORY_DELETE_SUCCESS: 'Category delete successfully.',
+  ADD_SUCCESS: 'added successfully',
+  UPDATE_SUCCESS: 'updated successfully.',
+  NOT_FOUND: 'not found.',
+  DELETE_SUCCESS: 'delete successfully.',
+  FETCH_SUCCESS: 'fetch successfully.',
 };
 
 module.exports = message;

@@ -7,7 +7,7 @@ const responseStatus = require('../utils/enum');
 const message = require('../utils/message');
 const { search, sort, paginate } = require('../services/commanFunction');
 
-const add_Category = async (req, res) => {
+const addCategory = async (req, res) => {
   const { category_name } = req.body;
   const { error } = category.validate(req.body);
 
@@ -40,31 +40,31 @@ const add_Category = async (req, res) => {
             message.INTERNAL_SERVER_ERROR,
           ),
         );
+    } else {
+      const categoryData = {
+        id: result.insertId,
+      };
+
+      return res
+        .status(StatusCodes.CREATED)
+        .json(
+          new GeneralResponse(
+            responseStatus.RESPONSE_SUCCESS,
+            StatusCodes.CREATED,
+            `Category ${message.ADD_SUCCESS}`,
+            categoryData,
+          ),
+        );
     }
-
-    const categoryData = {
-      id: result.insertId,
-      category_name,
-    };
-
-    return res
-      .status(StatusCodes.CREATED)
-      .json(
-        new GeneralResponse(
-          responseStatus.RESPONSE_SUCCESS,
-          StatusCodes.CREATED,
-          message.CATEGORY_ADD_SUCCESS,
-          categoryData,
-        ),
-      );
   });
 };
 
-const view_Category = async (req, res) => {
+const listCategory = async (req, res) => {
   const { searchKey, searchValue, sortBy, order, page, limit } = req.body;
-  const selectQuery = 'SELECT * FROM category';
+  const selectQuery =
+    'SELECT id , category_name FROM category WHERE isDeleted = ?';
 
-  db.query(selectQuery, (err, results) => {
+  db.query(selectQuery, [0], (err, results) => {
     if (err) {
       logger.error('Error retrieving categories:', err);
 
@@ -77,39 +77,88 @@ const view_Category = async (req, res) => {
             message.INTERNAL_SERVER_ERROR,
           ),
         );
+    } else {
+      let filteredData = search(results, searchKey, searchValue);
+      filteredData = sort(filteredData, sortBy, order);
+
+      const paginatedData = paginate(
+        filteredData,
+        parseInt(page, 10) || 1,
+        parseInt(limit, 10) || 10,
+      );
+
+      logger.info(`Categories ${message.FETCH_SUCCESS}`);
+
+      return res.status(StatusCodes.OK).json(
+        new GeneralResponse(
+          responseStatus.RESPONSE_SUCCESS,
+          StatusCodes.OK,
+          `Categories ${message.FETCH_SUCCESS}`,
+          {
+            total: filteredData.length,
+            page: parseInt(page, 10) || 1,
+            limit: parseInt(limit, 10) || 10,
+            categories: paginatedData,
+          },
+        ),
+      );
     }
-
-    let filteredData = search(results, searchKey, searchValue);
-
-    filteredData = sort(filteredData, sortBy, order);
-
-    const paginatedData = paginate(
-      filteredData,
-      parseInt(page, 10) || 1,
-      parseInt(limit, 10) || 10,
-    );
-
-    logger.info(message.CATEGORY_FETCH_SUCCESS);
-
-    return res.status(StatusCodes.OK).json(
-      new GeneralResponse(
-        responseStatus.RESPONSE_SUCCESS,
-        StatusCodes.OK,
-        message.CATEGORY_FETCH_SUCCESS,
-        {
-          total: filteredData.length,
-          page: parseInt(page, 10) || 1,
-          limit: parseInt(limit, 10) || 10,
-          categories: paginatedData,
-        },
-      ),
-    );
   });
 };
 
-const edit_category = async (req, res) => {
+const viewCategory = async (req, res) => {
+  const { id } = req.params;
+
+  const selectQuery =
+    'SELECT id, category_name FROM category WHERE id = ? AND isDeleted = ?';
+
+  db.query(selectQuery, [id, 0], (err, results) => {
+    if (err) {
+      logger.error('Error retrieving category:', err);
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json(
+          new GeneralResponse(
+            responseStatus.RESPONSE_ERROR,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            message.INTERNAL_SERVER_ERROR,
+          ),
+        );
+    }
+
+    if (results.length === 0) {
+      logger.info(`Category ${message.NOT_FOUND}`);
+
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json(
+          new GeneralResponse(
+            responseStatus.RESPONSE_ERROR,
+            StatusCodes.NOT_FOUND,
+            `Category ${message.NOT_FOUND}`,
+          ),
+        );
+    } else {
+      logger.info(`Category ${message.FETCH_SUCCESS}`);
+
+      return res
+        .status(StatusCodes.OK)
+        .json(
+          new GeneralResponse(
+            responseStatus.RESPONSE_SUCCESS,
+            StatusCodes.OK,
+            `Category ${message.FETCH_SUCCESS}`,
+            results[0],
+          ),
+        );
+    }
+  });
+};
+
+const editCategory = async (req, res) => {
   const { category_name } = req.body;
   const { id } = req.params;
+
   const updateQuery = 'UPDATE category SET category_name = ? WHERE id = ?';
 
   db.query(updateQuery, [category_name, id], (err, result) => {
@@ -128,7 +177,7 @@ const edit_category = async (req, res) => {
     }
 
     if (result.affectedRows === 0) {
-      logger.error(message.CATEGORY_NOT_FOUND);
+      logger.error(`Category ${message.NOT_FOUND}`);
 
       return res
         .status(StatusCodes.NOT_FOUND)
@@ -136,35 +185,49 @@ const edit_category = async (req, res) => {
           new GeneralResponse(
             responseStatus.RESPONSE_ERROR,
             StatusCodes.NOT_FOUND,
-            message.CATEGORY_NOT_FOUND,
+            `Category ${message.NOT_FOUND}`,
           ),
         );
+    } else {
+      logger.info(`Category ${message.UPDATE_SUCCESS}`);
+
+      return res.status(StatusCodes.OK).json(
+        new GeneralResponse(
+          responseStatus.RESPONSE_SUCCESS,
+          StatusCodes.OK,
+          `Category ${message.UPDATE_SUCCESS}`,
+          {
+            id,
+            category_name,
+          },
+        ),
+      );
     }
-
-    logger.info(message.CATEGORY_UPDATE_SUCCESS);
-
-    return res.status(StatusCodes.OK).json(
-      new GeneralResponse(
-        responseStatus.RESPONSE_SUCCESS,
-        StatusCodes.OK,
-        message.CATEGORY_UPDATE_SUCCESS,
-        {
-          id,
-          category_name,
-        },
-      ),
-    );
   });
 };
 
-const delete_category = async (req, res) => {
+const deleteCategory = async (req, res) => {
   const { id } = req.params;
-  const deleteQuery = 'DELETE FROM category WHERE id = ?';
+  const deleteQuery = 'UPDATE category SET isDeleted = ? WHERE id = ?';
 
   try {
-    db.query(deleteQuery, [id], (err, result) => {
+    db.query(deleteQuery, [1, id], (err, result) => {
+      if (err) {
+        logger.error(message.INTERNAL_SERVER_ERROR, err);
+
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json(
+            new GeneralResponse(
+              responseStatus.RESPONSE_ERROR,
+              StatusCodes.INTERNAL_SERVER_ERROR,
+              message.INTERNAL_SERVER_ERROR,
+            ),
+          );
+      }
+
       if (result.affectedRows === 0) {
-        logger.error(message.CATEGORY_NOT_FOUND);
+        logger.error(`Category ${message.NOT_FOUND}`);
 
         return res
           .status(StatusCodes.NOT_FOUND)
@@ -172,24 +235,22 @@ const delete_category = async (req, res) => {
             new GeneralResponse(
               responseStatus.RESPONSE_ERROR,
               StatusCodes.NOT_FOUND,
-              message.CATEGORY_NOT_FOUND,
+              `Category ${message.NOT_FOUND}`,
             ),
           );
+      } else {
+        logger.info(result);
+        return res.status(StatusCodes.OK).json(
+          new GeneralResponse(
+            responseStatus.RESPONSE_SUCCESS,
+            StatusCodes.OK,
+            `Category ${message.DELETE_SUCCESS}`,
+            {
+              id,
+            },
+          ),
+        );
       }
-
-      logger.info(result);
-
-      return res.status(StatusCodes.OK).json(
-        new GeneralResponse(
-          responseStatus.RESPONSE_SUCCESS,
-          StatusCodes.OK,
-          message.CATEGORY_DELETE_SUCCESS,
-          {
-            id,
-            category: result.category_name,
-          },
-        ),
-      );
     });
   } catch (err) {
     logger.error(message.INTERNAL_SERVER_ERROR, err);
@@ -207,8 +268,9 @@ const delete_category = async (req, res) => {
 };
 
 module.exports = {
-  add_Category,
-  view_Category,
-  edit_category,
-  delete_category,
+  addCategory,
+  listCategory,
+  editCategory,
+  deleteCategory,
+  viewCategory,
 };

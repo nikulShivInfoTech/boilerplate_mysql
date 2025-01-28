@@ -1,6 +1,6 @@
 const { db } = require('./userTableModel');
 
-const ensureOtpTableExists = async () => {
+const ensureCategoryTableExists = async () => {
   const createTableQuery = `CREATE TABLE IF NOT EXISTS category (
   id INT AUTO_INCREMENT PRIMARY KEY,
   category_name VARCHAR(255) NOT NULL
@@ -15,4 +15,4 @@ const ensureOtpTableExists = async () => {
     });
   });
 };
-module.exports = { ensureOtpTableExists };
+module.exports = { ensureCategoryTableExists };
