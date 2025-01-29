@@ -452,10 +452,74 @@ const editProduct = (req, res) => {
   });
 };
 
+const deleteProduct = (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json(
+        new GeneralResponse(
+          responseStatus.RESPONSE_ERROR,
+          StatusCodes.NOT_FOUND,
+          message.ID_REQUIRED,
+        ),
+      );
+
+  } else {
+    const deleteQuery = `UPDATE product SET isDeleted = ?, image = ? WHERE id = ?`;
+
+    db.query(deleteQuery, [true, '[]', id], (err, result) => {
+      if (err) {
+        console.error('Error updating product:', err);
+
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json(
+            new GeneralResponse(
+              responseStatus.RESPONSE_ERROR,
+              StatusCodes.INTERNAL_SERVER_ERROR,
+              message.INTERNAL_SERVER_ERROR,
+            ),
+          );
+
+      } else {
+        if (result.affectedRows === 0) {
+
+          return res
+            .status(StatusCodes.NOT_FOUND)
+            .json(
+              new GeneralResponse(
+                responseStatus.RESPONSE_ERROR,
+                StatusCodes.NOT_FOUND,
+                ` Product ${message.NOT_FOUND}`,
+              ),
+            );
+
+        } else {
+
+          return res
+            .status(StatusCodes.OK)
+            .json(
+              new GeneralResponse(
+                responseStatus.RESPONSE_SUCCESS,
+                StatusCodes.OK,
+              ` Product ${message.DELETE_SUCCESS}`,
+              ),
+            );
+        }
+
+      }
+    });
+  }
+};
+
 module.exports = {
   productAdd,
   productImageUpload,
   productView,
   listProduct,
   editProduct,
+  deleteProduct,
 };
