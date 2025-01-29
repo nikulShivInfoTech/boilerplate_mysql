@@ -25,6 +25,12 @@ const message = {
   NOT_FOUND: 'not found.',
   DELETE_SUCCESS: 'delete successfully.',
   FETCH_SUCCESS: 'fetch successfully.',
+  UNEXPECTED_ERROR: 'Unexpected error occurred.',
+  ID_REQUIRED: 'ID is required.',
+  MIN_IMAGE_ERROR:'At least one image file is required.',
+  IMAGE_UPLOAD_ERROR:'Failed to add product images.',
+  NO_DATA_AVAILABLE:'No data available',
+  FAILED_TO : 'Failed to'
 };
 
 module.exports = message;
