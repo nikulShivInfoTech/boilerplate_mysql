@@ -48,13 +48,12 @@ const productEdit = Joi.object({
     description: Joi.string()
       .min(1)
       .max(500)
-      .required()
+      .optional()
       .messages({
         'string.base': '"description" should be a type of string',
         'string.empty': '"description" cannot be an empty field',
         'string.min': '"description" should have a minimum length of {#limit}',
         'string.max': '"description" should have a maximum length of {#limit}',
-        'any.required': '"description" is a required field'
       }),
   
     category_id: Joi.number()

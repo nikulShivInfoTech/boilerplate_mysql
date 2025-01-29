@@ -30,6 +30,7 @@ const message = {
   MIN_IMAGE_ERROR:'At least one image file is required.',
   IMAGE_UPLOAD_ERROR:'Failed to add product images.',
   NO_DATA_AVAILABLE:'No data available',
+  FAILED_TO : 'Failed to'
 };
 
 module.exports = message;

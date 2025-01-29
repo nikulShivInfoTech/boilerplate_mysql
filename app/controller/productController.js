@@ -36,7 +36,7 @@ const productAdd = async (req, res) => {
       [category_id, product_name, description],
       (err, result) => {
         if (err) {
-          logger.error('Error inserting product:', err);
+          logger.error(`${message.FAILED_TO} add product`, err);
 
           return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -63,15 +63,15 @@ const productAdd = async (req, res) => {
       },
     );
   } catch (err) {
-    logger.error(`${message.UNEXPECTED_ERROR}`);
+    logger.error(`${message.INTERNAL_SERVER_ERROR}`);
 
     return res
-      .status(StatusCodes.BAD_REQUEST)
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json(
         new GeneralResponse(
           responseStatus.RESPONSE_ERROR,
-          StatusCodes.BAD_REQUEST,
-          `${message.UNEXPECTED_ERROR}`,
+          StatusCodes.INTERNAL_SERVER_ERROR,
+          `${message.INTERNAL_SERVER_ERROR}`,
         ),
       );
   }
@@ -79,7 +79,6 @@ const productAdd = async (req, res) => {
 
 const productImageUpload = async (req, res) => {
   const { id } = req.body;
-  console.log(req.body);
 
   if (!id) {
     return res
@@ -94,6 +93,7 @@ const productImageUpload = async (req, res) => {
   }
 
   if (!req.files || req.files.length === 0) {
+
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json(
@@ -116,7 +116,7 @@ const productImageUpload = async (req, res) => {
     const selectQuery = 'SELECT image FROM product WHERE id = ?';
     db.query(selectQuery, [id], (err, results) => {
       if (err) {
-        console.error('Error fetching product:', err);
+        console.error(`${message.FAILED_TO} add product image`, err);
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json(
@@ -148,7 +148,8 @@ const productImageUpload = async (req, res) => {
         [JSON.stringify(updatedImages), id],
         (updateErr) => {
           if (updateErr) {
-            logger.error('Error updating product:', updateErr);
+            logger.error(`${message.FAILED_TO} updating product`, updateErr);
+
             return res
               .status(StatusCodes.INTERNAL_SERVER_ERROR)
               .json(
@@ -158,8 +159,10 @@ const productImageUpload = async (req, res) => {
                   `${message.IMAGE_UPLOAD_ERROR}`,
                 ),
               );
+
           } else {
             logger.info(`Images ${message.ADD_SUCCESS}`);
+
             return res
               .status(StatusCodes.ACCEPTED)
               .json(
@@ -174,7 +177,7 @@ const productImageUpload = async (req, res) => {
       );
     });
   } catch (err) {
-    logger.error('Unexpected error:', err);
+    logger.error(INTERNAL_SERVER_ERROR, err);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json(
@@ -215,7 +218,7 @@ const productView = async (req, res) => {
     const queryParams = id ? [id] : [];
     db.query(query, queryParams, (err, results) => {
       if (err) {
-        logger.error('Error fetching products with categories:', err);
+        logger.error(`${message.FAILED_TO} fetch product`, err);
 
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -252,7 +255,7 @@ const productView = async (req, res) => {
         );
     });
   } catch (err) {
-    logger.error(`${message.UNEXPECTED_ERROR}`, err);
+    logger.error(message.INTERNAL_SERVER_ERROR, err);
 
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -260,7 +263,7 @@ const productView = async (req, res) => {
         new GeneralResponse(
           responseStatus.RESPONSE_ERROR,
           StatusCodes.INTERNAL_SERVER_ERROR,
-          `${message.UNEXPECTED_ERROR}`,
+          `${message.INTERNAL_SERVER_ERROR}`,
         ),
       );
   }
@@ -292,7 +295,7 @@ const listProduct = async (req, res) => {
 
     db.query(selectQuery, (err, results) => {
       if (err) {
-        logger.error('Error retrieving products:', err);
+        logger.error(`${message.FAILED_TO} retrieving products:`, err);
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json(
@@ -344,7 +347,7 @@ const listProduct = async (req, res) => {
       );
     });
   } catch (error) {
-    logger.error('Unexpected error:', error);
+    logger.error(message.INTERNAL_SERVER_ERROR, error);
 
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -352,7 +355,7 @@ const listProduct = async (req, res) => {
         new GeneralResponse(
           responseStatus.RESPONSE_ERROR,
           StatusCodes.INTERNAL_SERVER_ERROR,
-          message.UNEXPECTED_ERROR,
+          message.INTERNAL_SERVER_ERROR,
         ),
       );
   }
@@ -409,7 +412,7 @@ const editProduct = (req, res) => {
 
   db.query(updateQuery, queryParams, (err, result) => {
     if (err) {
-      logger.error('Error updating product:', err);
+      logger.error(`${message.FAILED_TO} updating product:`, err);
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json(
@@ -433,7 +436,7 @@ const editProduct = (req, res) => {
         );
     }
 
-    logger.info(`Product with ID ${id} updated successfully.`);
+    logger.info(`product ${message.UPDATE_SUCCESS}` );
     return res.status(StatusCodes.OK).json(
       new GeneralResponse(
         responseStatus.RESPONSE_SUCCESS,
@@ -472,7 +475,7 @@ const deleteProduct = (req, res) => {
 
     db.query(deleteQuery, [true, '[]', id], (err, result) => {
       if (err) {
-        console.error('Error updating product:', err);
+        console.error(`${message.FAILED_TO} delete product:`, err);
 
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
