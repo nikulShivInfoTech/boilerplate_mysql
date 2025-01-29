@@ -6,6 +6,7 @@ const { StatusCodes } = require('http-status-codes');
 const responseStatus = require('../utils/enum');
 const message = require('../utils/message');
 const { search, sort, paginate } = require('../services/commanFunction');
+const { Logger } = require('winston');
 
 const productAdd = async (req, res) => {
   const { category_id, product_name, description } = req.body;
@@ -39,12 +40,12 @@ const productAdd = async (req, res) => {
           logger.error(`${message.FAILED_TO} add product`, err);
 
           return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .status(StatusCodes.BAD_REQUEST)
             .json(
               new GeneralResponse(
-                responseStatus.INTERNAL_SERVER_ERROR,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                message.INTERNAL_SERVER_ERROR,
+                responseStatus.RESPONSE_ERROR,
+                StatusCodes.BAD_REQUEST,
+               `${message.FAILED_TO} add product`,
               ),
             );
         } else {
@@ -116,16 +117,16 @@ const productImageUpload = async (req, res) => {
     const selectQuery = 'SELECT image FROM product WHERE id = ?';
     db.query(selectQuery, [id], (err, results) => {
       if (err) {
-        console.error(`${message.FAILED_TO} add product image`, err);
+        logger.error(`${message.FAILED_TO} add product image`, err);
         return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json(
-            new GeneralResponse(
-              responseStatus.RESPONSE_ERROR,
-              StatusCodes.INTERNAL_SERVER_ERROR,
-              `${message.INTERNAL_SERVER_ERROR}`,
-            ),
-          );
+        .status(StatusCodes.BAD_REQUEST)
+        .json(
+          new GeneralResponse(
+            responseStatus.RESPONSE_ERROR,
+            StatusCodes.BAD_REQUEST,
+          `${message.FAILED_TO} add product image`,
+          ),
+        );
       }
 
       if (results.length === 0) {
@@ -151,11 +152,11 @@ const productImageUpload = async (req, res) => {
             logger.error(`${message.FAILED_TO} updating product`, updateErr);
 
             return res
-              .status(StatusCodes.INTERNAL_SERVER_ERROR)
+              .status(StatusCodes.BAD_REQUEST)
               .json(
                 new GeneralResponse(
                   responseStatus.RESPONSE_ERROR,
-                  StatusCodes.INTERNAL_SERVER_ERROR,
+                  StatusCodes.BAD_REQUEST,
                   `${message.IMAGE_UPLOAD_ERROR}`,
                 ),
               );
@@ -221,12 +222,12 @@ const productView = async (req, res) => {
         logger.error(`${message.FAILED_TO} fetch product`, err);
 
         return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .status(StatusCodes.BAD_REQUEST)
           .json(
             new GeneralResponse(
               responseStatus.RESPONSE_ERROR,
-              StatusCodes.INTERNAL_SERVER_ERROR,
-              `${message.INTERNAL_SERVER_ERROR}`,
+              StatusCodes.BAD_REQUEST,
+              `${message.FAILED_TO} fetch product`,
             ),
           );
       }
@@ -250,9 +251,11 @@ const productView = async (req, res) => {
           new GeneralResponse(
             responseStatus.RESPONSE_SUCCESS,
             StatusCodes.OK,
+            `Products ${message.FETCH_SUCCESS}`,
             results,
           ),
         );
+
     });
   } catch (err) {
     logger.error(message.INTERNAL_SERVER_ERROR, err);
@@ -297,12 +300,12 @@ const listProduct = async (req, res) => {
       if (err) {
         logger.error(`${message.FAILED_TO} retrieving products:`, err);
         return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .status(StatusCodes.BAD_REQUEST)
           .json(
             new GeneralResponse(
               responseStatus.RESPONSE_ERROR,
-              StatusCodes.INTERNAL_SERVER_ERROR,
-              message.INTERNAL_SERVER_ERROR,
+              StatusCodes.BAD_REQUEST,
+              `${message.FAILED_TO} retrieving products`,
             ),
           );
       }
@@ -414,12 +417,12 @@ const editProduct = (req, res) => {
     if (err) {
       logger.error(`${message.FAILED_TO} updating product:`, err);
       return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .status(StatusCodes.BAD_REQUEST)
         .json(
           new GeneralResponse(
             responseStatus.RESPONSE_ERROR,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            message.INTERNAL_SERVER_ERROR,
+            StatusCodes.BAD_REQUEST,
+            `${message.FAILED_TO} updating product:`,
           ),
         );
     }
@@ -475,15 +478,15 @@ const deleteProduct = (req, res) => {
 
     db.query(deleteQuery, [true, '[]', id], (err, result) => {
       if (err) {
-        console.error(`${message.FAILED_TO} delete product:`, err);
+        logger.error(`${message.FAILED_TO} delete product`, err);
 
         return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .status(StatusCodes.BAD_REQUEST)
           .json(
             new GeneralResponse(
               responseStatus.RESPONSE_ERROR,
-              StatusCodes.INTERNAL_SERVER_ERROR,
-              message.INTERNAL_SERVER_ERROR,
+              StatusCodes.BAD_REQUEST,
+              `${message.FAILED_TO} delete product`,
             ),
           );
 
